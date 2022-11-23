@@ -41,7 +41,6 @@ vector<vector<string>> getSolutions(int n)
     {
         board[i] = s;
     }
-    string replacement(n, '_');
     vector<int> rowCounter(n, 0);                // Keeps track of which rows are occupied
     vector<int> NEDiagonalCounter(2 * n - 1, 0); // Keeps track of which NW diagonals are occupied
     vector<int> SEDiagonalCounter(2 * n - 1, 0); // Keeps track of which SE diagonals are occupied
