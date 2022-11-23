@@ -3,7 +3,7 @@ using namespace std;
 
 int main()
 {
-    int p[5] = {0, 1, 2, 5, 6};
+    int p[5] = {0, 1, 2, 5, 6}; // starting to count the first object from 1.
     int wt[5] = {0, 2, 3, 4, 5};
     int W = 8, n = 4;
     int k[5][9];
