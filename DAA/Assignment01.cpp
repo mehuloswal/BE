@@ -3,7 +3,7 @@ using namespace std;
 class Solution
 {
 public:
-    long long recursive_fibonacci(long long n)
+    long long recursive_fibonacci(long long n) // S:O(n) T:exponential
     {
         if (n == 1)
             return 0;
@@ -34,7 +34,7 @@ public:
         recursive_fibonacci(b, a + b, n - 1);
         return;
     }
-    void non_recursive_fibonacci(long long n)
+    void non_recursive_fibonacci(long long n) // S:O(1)  T:O(n)
     {
         long long a = 0;
         long long b = 1;
