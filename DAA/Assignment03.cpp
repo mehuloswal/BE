@@ -1,71 +1,45 @@
+
 #include <bits/stdc++.h>
 using namespace std;
 
-// Structure for an item which stores weight and
-// corresponding value of Item
-struct Item
+// we can further improve the above Knapsack function's space
+// complexity
+int knapSack(int W, int wt[], int val[], int n)
 {
-    int value, weight;
+    int i, w;
+    int K[2][W + 1];
+    // We know we are always using the current row or
+    // the previous row of the array/vector . Thereby we can
+    // improve it further by using a 2D array but with only
+    // 2 rows i%2 will be giving the index inside the bounds
+    // of 2d array K
 
-    // Constructor
-    Item(int value, int weight)
+    for (i = 0; i <= n; i++)
     {
-        this->value = value;
-        this->weight = weight;
-    }
-};
-
-// Comparison function to sort Item
-// according to val/weight ratio
-bool cmp(struct Item a, struct Item b)
-{
-    double r1 = (double)a.value / (double)a.weight;
-    double r2 = (double)b.value / (double)b.weight;
-    return r1 > r2;
-}
-
-// Main greedy function to solve problem //nlogn
-double fractionalKnapsack(int W, struct Item arr[], int N)
-{
-    // Sorting Item on basis of ratio
-    sort(arr, arr + N, cmp);
-
-    double finalvalue = 0.0;
-
-    // Looping through all items
-    for (int i = 0; i < N; i++)
-    {
-
-        // If adding Item won't overflow,
-        // add it completely
-        if (arr[i].weight <= W)
+        for (w = 0; w <= W; w++)
         {
-            W -= arr[i].weight;
-            finalvalue += arr[i].value;
-        }
-
-        // If we can't add current Item,
-        // add fractional part of it
-        else
-        {
-            finalvalue += arr[i].value * ((double)W / (double)arr[i].weight);
-            break;
+            if (i == 0 || w == 0)
+                K[i % 2][w] = 0;
+            else if (wt[i - 1] <= w)
+                K[i % 2][w] = max(
+                    val[i - 1] + K[(i - 1) % 2][w - wt[i - 1]],
+                    K[(i - 1) % 2][w]);
+            else
+                K[i % 2][w] = K[(i - 1) % 2][w];
         }
     }
-
-    // Returning final value
-    return finalvalue;
+    return K[n % 2][W];
 }
 
-// Driver code
+// Driver Code
 int main()
 {
+    int val[] = {60, 100, 120};
+    int wt[] = {10, 20, 30};
     int W = 50;
-    Item arr[] = {{60, 10}, {100, 20}, {120, 30}};
+    int n = sizeof(val) / sizeof(val[0]);
 
-    int N = sizeof(arr) / sizeof(arr[0]);
+    cout << knapSack(W, wt, val, n);
 
-    // Function call
-    cout << fractionalKnapsack(W, arr, N);
     return 0;
 }

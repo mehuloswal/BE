@@ -1,45 +1,91 @@
-
 #include <bits/stdc++.h>
 using namespace std;
 
-// we can further improve the above Knapsack function's space
-// complexity
-int knapSack(int W, int wt[], int val[], int n)
+void solve(int col, vector<string> &board, vector<vector<string>> &ans,
+           vector<int> &rowCounter,
+           vector<int> &NEDiagonalCounter, vector<int> &SEDiagonalCounter, int n)
 {
-    int i, w;
-    int K[2][W + 1];
-    // We know we are always using the current row or
-    // the previous row of the array/vector . Thereby we can
-    // improve it further by using a 2D array but with only
-    // 2 rows i%2 will be giving the index inside the bounds
-    // of 2d array K
-
-    for (i = 0; i <= n; i++)
+    if (col == n)
     {
-        for (w = 0; w <= W; w++)
+        ans.push_back(board);
+        return;
+    }
+
+    for (int row = 0; row < n; row++) // for tracking the diagonals.
+    {
+        if (rowCounter[row] == 0 && SEDiagonalCounter[row + col] == 0 && NEDiagonalCounter[n - 1 + col - row] == 0) // if we can place in a cell or not
         {
-            if (i == 0 || w == 0)
-                K[i % 2][w] = 0;
-            else if (wt[i - 1] <= w)
-                K[i % 2][w] = max(
-                    val[i - 1] + K[(i - 1) % 2][w - wt[i - 1]],
-                    K[(i - 1) % 2][w]);
-            else
-                K[i % 2][w] = K[(i - 1) % 2][w];
+
+            board[row][col] = 'Q';
+            rowCounter[row] = 1;
+            SEDiagonalCounter[row + col] = 1;
+            NEDiagonalCounter[n - 1 + col - row] = 1;
+
+            solve(col + 1, board, ans, rowCounter, NEDiagonalCounter, SEDiagonalCounter, n);
+
+            board[row][col] = '_';
+            rowCounter[row] = 0;
+            SEDiagonalCounter[row + col] = 0;
+            NEDiagonalCounter[n - 1 + col - row] = 0;
         }
     }
-    return K[n % 2][W];
 }
 
-// Driver Code
+vector<vector<string>> getSolutions(int n)
+{
+    vector<vector<string>> ans; // Stores all the solutions
+    vector<string> board(n);    // Stores the current board
+
+    string s(n, '_');
+    for (int i = 0; i < n; i++)
+    {
+        board[i] = s;
+    }
+    string replacement(n, '_');
+    vector<int> rowCounter(n, 0);                // Keeps track of which rows are occupied
+    vector<int> NEDiagonalCounter(2 * n - 1, 0); // Keeps track of which NW diagonals are occupied
+    vector<int> SEDiagonalCounter(2 * n - 1, 0); // Keeps track of which SE diagonals are occupied
+    solve(0, board, ans, rowCounter, NEDiagonalCounter, SEDiagonalCounter, n);
+    return ans;
+}
+
 int main()
 {
-    int val[] = {60, 100, 120};
-    int wt[] = {10, 20, 30};
-    int W = 50;
-    int n = sizeof(val) / sizeof(val[0]);
+    int n, init_x, init_y;
+    cout << "Enter the value of N: ";
+    cin >> n;
+    cout << "Enter initial row (0 based): ";
+    cin >> init_x;
+    while (init_x >= n)
+    {
+        cout << "Enter a value <" << n << ": ";
+        cin >> init_x;
+    }
+    cout << "\nEnter initial column (0 based): ";
+    cin >> init_y;
+    while (init_y >= n)
+    {
+        cout << "Enter a value <" << n << ": ";
+        cin >> init_y;
+    }
+    cout << endl;
+    vector<vector<string>> ans = getSolutions(n);
 
-    cout << knapSack(W, wt, val, n);
-
-    return 0;
+    for (int i = 0; i < ans.size(); i++)
+    {
+        if (ans[i][init_x][init_y] == 'Q')
+        {
+            for (int j = 0; j < ans[i].size(); j++)
+            {
+                for (int k = 0; k < ans[i][j].length(); k++)
+                {
+                    cout << ans[i][j][k] << " ";
+                }
+                cout << endl;
+            }
+            cout << "\nThank You!";
+            return 0;
+        }
+    }
+    cout << "No Solution Exists with the configuratio of queens provided";
 }
