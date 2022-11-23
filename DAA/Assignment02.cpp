@@ -1,5 +1,13 @@
 
 // C++(STL) program for Huffman Coding with STL
+
+// used as a compression technique ->reducing size of data
+// reduces cost of transmission
+// huffman code -> variable length coding ->follows optmial merge pattern -> greedy approach -> prefix code generation by assigning 0 and 1 to the branches
+// The time complexity for encoding each unique character based on its frequency is O(nlog n).
+// Extracting minimum frequency from the priority queue takes place 2*(n-1) times and its complexity is O(log n).
+// Thus the overall complexity is O(nlog n).
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -60,6 +68,7 @@ void HuffmanCodes(char data[], int freq[], int size)
     struct MinHeapNode *left, *right, *top;
 
     // Create a min heap & inserts all characters of data[]
+    // In the Huffman encoding implementation,according to frequency element would be arranged in the queue.Element having least frequency would be at the root of the heap.
     priority_queue<MinHeapNode *, vector<MinHeapNode *>, compare> minHeap;
 
     for (int i = 0; i < size; ++i)
