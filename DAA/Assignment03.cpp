@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
-
+// bottom-up manner
+// table -> memoization
+// O(W*n) ->Time complexity
 int main()
 {
     int p[5] = {0, 1, 2, 5, 6}; // starting to count the first object from 1.
